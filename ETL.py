@@ -1,6 +1,5 @@
 import pandas as pd
 import datetime as dt
-import time
 import numpy as np
 
 
@@ -47,6 +46,66 @@ def ETL_spot(df_final): # colocar los datos extraidos de spot
     df_final=df_final.sort_values('Fecha').reset_index(drop=True)
     
     return df_final
+
+
+
+
+def ETL_spot_contador(df_final): # colocar los datos extraidos de spot
+    
+    # Agregar columnas
+    
+
+    if df_final.shape[0]==0:
+        df_final=df_final
+    else:
+        if  'USDTARS' in df_final['symbol'].to_list(): # solo se aplican las modificacionse en caso de que el dataframe de los movimientos de spot contengan datos
+            df_final['Order_Type']=np.where(df_final['symbol']!='USDTARS',~df_final["isBuyer"],df_final['isBuyer'])
+            df_final['Order_Type']=df_final['Order_Type'].replace({True:'BUY',False:'SELL'})
+            df_final['Medio_pago']='-'
+            df_final['Exchange_']='Binance Spot'
+
+            # Seleccion de columnas reelevantes 
+            df_final=df_final.loc[:,['orderId','Order_Type','time','symbol','qty','quoteQty','price','Exchange_','Medio_pago']] 
+
+
+            # Cambiar tipos 
+            df_final['qty']=df_final['qty'].astype(float)
+            df_final['quoteQty']=df_final['quoteQty'].astype(float)
+            df_final['price']=df_final['price'].astype(float)
+            # Agrupar datos 
+            df_final=df_final.groupby('orderId').agg({'Order_Type':'first',
+                                    'time':'first',
+                                    'symbol':'first',
+                                    'qty':'sum',
+                                    'quoteQty':'sum',
+                                    'price':'mean',             
+                                    'Exchange_':'first',
+                                    'Medio_pago':'first'})
+            df_final=df_final.reset_index(drop=False)
+            # Cambiar formato fecha 
+            df_final['time']=df_final['time'].apply(lambda x: dt.datetime.fromtimestamp(x/1000))
+            # Cambiar nombres 
+            df_final.rename({'orderId':'Order_Number','time':'Fecha','symbol':'Tipo_Cripto','qty':'Cantidad_Cripto','quoteQty':'Monto_ARS','price':'Precio_unitario'},axis=1,inplace=True)
+            # Cambiar puntos por comas 
+            df_final['Cantidad_Cripto']=df_final['Cantidad_Cripto'].astype(str).str.replace('.',',')
+            df_final['Precio_unitario']=df_final['Precio_unitario'].astype(str).str.replace('.',',')
+            df_final['Monto_ARS']=df_final['Monto_ARS'].astype(str).str.replace('.',',')
+            # Dar formato a fecha 
+            df_final['Fecha']=df_final["Fecha"].dt.strftime("%d-%m-%Y %H:%M:%S")
+            df_final['Fecha']=pd.to_datetime(df_final['Fecha'],format="%d-%m-%Y %H:%M:%S")
+            
+            # Ordenar datos por fecha 
+            df_final=df_final.sort_values('Fecha').reset_index(drop=True)
+        else:
+            # Agregar columnas
+            df_final['Order_Type']=''
+            df_final['Exchange_']=''
+            df_final['Medio_pago']='-'
+            # Seleccion de columnas reelevantes 
+            df_final=df_final.loc[:,['orderId','Order_Type','time','symbol','qty','quoteQty','price','Exchange_','Medio_pago']] 
+    
+    return df_final
+
 
 
 # Transformacion de datos 
@@ -136,62 +195,3 @@ def ETL_p2p_contador(df_final):
     return df_final
 
 
-
-
-
-
-def ETL_spot_contador(df_final): # colocar los datos extraidos de spot
-    
-    # Agregar columnas
-    
-
-    if df_final.shape[0]==0:
-        df_final=df_final
-    else:
-        if  'USDTARS' in df_final['symbol'].to_list(): # solo se aplican las modificacionse en caso de que el dataframe de los movimientos de spot contengan datos
-            df_final['Order_Type']=np.where(df_final['symbol']!='USDTARS',~df_final["isBuyer"],df_final['isBuyer'])
-            df_final['Order_Type']=df_final['Order_Type'].replace({True:'BUY',False:'SELL'})
-            df_final['Medio_pago']='-'
-            df_final['Exchange_']='Binance Spot'
-
-            # Seleccion de columnas reelevantes 
-            df_final=df_final.loc[:,['orderId','Order_Type','time','symbol','qty','quoteQty','price','Exchange_','Medio_pago']] 
-
-
-            # Cambiar tipos 
-            df_final['qty']=df_final['qty'].astype(float)
-            df_final['quoteQty']=df_final['quoteQty'].astype(float)
-            df_final['price']=df_final['price'].astype(float)
-            # Agrupar datos 
-            df_final=df_final.groupby('orderId').agg({'Order_Type':'first',
-                                    'time':'first',
-                                    'symbol':'first',
-                                    'qty':'sum',
-                                    'quoteQty':'sum',
-                                    'price':'mean',             
-                                    'Exchange_':'first',
-                                    'Medio_pago':'first'})
-            df_final=df_final.reset_index(drop=False)
-            # Cambiar formato fecha 
-            df_final['time']=df_final['time'].apply(lambda x: dt.datetime.fromtimestamp(x/1000))
-            # Cambiar nombres 
-            df_final.rename({'orderId':'Order_Number','time':'Fecha','symbol':'Tipo_Cripto','qty':'Cantidad_Cripto','quoteQty':'Monto_ARS','price':'Precio_unitario'},axis=1,inplace=True)
-            # Cambiar puntos por comas 
-            df_final['Cantidad_Cripto']=df_final['Cantidad_Cripto'].astype(str).str.replace('.',',')
-            df_final['Precio_unitario']=df_final['Precio_unitario'].astype(str).str.replace('.',',')
-            df_final['Monto_ARS']=df_final['Monto_ARS'].astype(str).str.replace('.',',')
-            # Dar formato a fecha 
-            df_final['Fecha']=df_final["Fecha"].dt.strftime("%d-%m-%Y %H:%M:%S")
-            df_final['Fecha']=pd.to_datetime(df_final['Fecha'],format="%d-%m-%Y %H:%M:%S")
-            
-            # Ordenar datos por fecha 
-            df_final=df_final.sort_values('Fecha').reset_index(drop=True)
-        else:
-            # Agregar columnas
-            df_final['Order_Type']=''
-            df_final['Exchange_']=''
-            df_final['Medio_pago']='-'
-            # Seleccion de columnas reelevantes 
-            df_final=df_final.loc[:,['orderId','Order_Type','time','symbol','qty','quoteQty','price','Exchange_','Medio_pago']] 
-    
-    return df_final

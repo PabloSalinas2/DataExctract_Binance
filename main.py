@@ -1,4 +1,4 @@
-import app_extraccion as ap
+import funciones_principales as ap
 import tkinter
 from tkinter import messagebox
 import threading 
@@ -33,14 +33,14 @@ def main():
     campo_fecha_final.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
 
 
-    def top7():
+    def mis_registros(): 
         label_estado.config(text="Cargando...", fg="blue",font=fuente)
         frame_inferior.update_idletasks()
 
 
         inicio=campo_fecha_inicial.get()
         fin=campo_fecha_final.get()
-        ap.extarccion_top7(inicio,fin)
+        ap.cargar_planilla_misregistros(inicio,fin)
 
         label_estado.config(text="Carga Exitosa", fg="green",font=fuente)
         messagebox.showinfo("Carga de Datos", "Los datos se han cargado exitosamente.")
@@ -50,13 +50,13 @@ def main():
     #     fin=campo_fecha_final.get()
     #     ap.extraccion_general(inicio,fin)
 
-    def para_contador():
+    def registros_para_contador():
         label_estado.config(text="Cargando...", fg="blue",font=fuente)
         frame_inferior.update_idletasks()
 
         inicio=campo_fecha_inicial.get()
         fin=campo_fecha_final.get()
-        ap.planilla_contador(inicio,fin)
+        ap.cargar_planilla_contador(inicio,fin)
 
         label_estado.config(text="Carga Exitosa", fg="green",font=fuente)
         messagebox.showinfo("Carga de Datos", "Los datos se han cargado exitosamente.")
@@ -65,12 +65,12 @@ def main():
 
     def iniciar_carga_datos_top7():
         # Iniciar el proceso de carga de datos en un hilo separado
-        hilo = threading.Thread(target=top7)
+        hilo = threading.Thread(target=mis_registros)
         hilo.start()
 
     def iniciar_carga_datos_contador():
         # Iniciar el proceso de carga de datos en un hilo separado
-        hilo = threading.Thread(target=para_contador)
+        hilo = threading.Thread(target=registros_para_contador)
         hilo.start()
 
 
