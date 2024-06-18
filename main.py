@@ -1,6 +1,3 @@
-
-
-
 import app_extraccion as ap
 import tkinter
 from tkinter import messagebox

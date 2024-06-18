@@ -1,7 +1,6 @@
 from binance.spot import Spot
 from dotenv import load_dotenv
 import os
-import config
 import pandas as pd
 import datetime as dt
 import pygsheets

@@ -3,3 +3,6 @@
 /__pycache__
 calculadora_arbitraje.py
 optimizacion.ipynb
+.env
+calculadora_arbitraje
+practicas.py
