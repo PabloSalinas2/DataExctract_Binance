@@ -6,44 +6,48 @@ import numpy as np
 def ETL_spot(df_final): # colocar los datos extraidos de spot
     
     # Agregar columnas 
-    df_final['Order_Type']=np.where(df_final['symbol']!='USDTARS',~df_final["isBuyer"],df_final['isBuyer'])
-    df_final['Order_Type']=df_final['Order_Type'].replace({True:'BUY',False:'SELL'})
-    df_final['Medio_pago']='-'
-    df_final['Exchange_']='Binance Spot'
-    df_final['Monto_usdt']=np.where(df_final['symbol']=='USDTARS',df_final['qty'],df_final['quoteQty'])
-    # Seleccion de columnas reelevantes 
-    df_final=df_final.loc[:,['orderId','Order_Type','time','symbol','qty','quoteQty','price','Monto_usdt','Exchange_','Medio_pago']] 
-    # Cambiar tipos 
-    df_final['qty']=df_final['qty'].astype(float)
-    df_final['quoteQty']=df_final['quoteQty'].astype(float)
-    df_final['price']=df_final['price'].astype(float)
-    df_final['Monto_usdt']=df_final['Monto_usdt'].astype(float)
-    # Agrupar datos 
-    df_final=df_final.groupby('orderId').agg({'Order_Type':'first',
-                            'time':'first',
-                            'symbol':'first',
-                            'qty':'sum',
-                            'quoteQty':'sum',
-                            'price':'mean',
-                            'Monto_usdt': 'sum',              
-                            'Exchange_':'first',
-                            'Medio_pago':'first'})
-    df_final=df_final.reset_index(drop=False)
-    # Cambiar formato fecha 
-    df_final['time']=df_final['time'].apply(lambda x: dt.datetime.fromtimestamp(x/1000))
-    # Cambiar nombres 
-    df_final.rename({'orderId':'Order_Number','time':'Fecha','symbol':'Tipo_Cripto','qty':'Cantidad_cripto','quoteQty':'Precio_total','price':'Precio_unitario'},axis=1,inplace=True)
-    # Cambiar puntos por comas 
-    df_final['Cantidad_cripto']=df_final['Cantidad_cripto'].astype(str).str.replace('.',',')
-    df_final['Monto_usdt']=df_final['Monto_usdt'].astype(str).str.replace('.',',')
-    df_final['Precio_unitario']=df_final['Precio_unitario'].astype(str).str.replace('.',',')
-    df_final['Precio_total']=df_final['Precio_total'].astype(str).str.replace('.',',')
-    # Dar formato a fecha 
-    df_final['Fecha']=df_final["Fecha"].dt.strftime("%d-%m-%Y %H:%M:%S")
-    df_final['Fecha']=pd.to_datetime(df_final['Fecha'],format="%d-%m-%Y %H:%M:%S")
+    if df_final.shape[0]!=0:
+        df_final['Order_Type']=np.where(df_final['symbol']!='USDTARS',~df_final["isBuyer"],df_final['isBuyer'])
+        df_final['Order_Type']=df_final['Order_Type'].replace({True:'BUY',False:'SELL'})
+        df_final['Medio_pago']='-'
+        df_final['Exchange_']='Binance Spot'
+        df_final['Monto_usdt']=np.where(df_final['symbol']=='USDTARS',df_final['qty'],df_final['quoteQty'])
+        # Seleccion de columnas reelevantes 
+        df_final=df_final.loc[:,['orderId','Order_Type','time','symbol','qty','quoteQty','price','Monto_usdt','Exchange_','Medio_pago']] 
+        # Cambiar tipos 
+        df_final['qty']=df_final['qty'].astype(float)
+        df_final['quoteQty']=df_final['quoteQty'].astype(float)
+        df_final['price']=df_final['price'].astype(float)
+        df_final['Monto_usdt']=df_final['Monto_usdt'].astype(float)
+        # Agrupar datos 
+        df_final=df_final.groupby('orderId').agg({'Order_Type':'first',
+                                'time':'first',
+                                'symbol':'first',
+                                'qty':'sum',
+                                'quoteQty':'sum',
+                                'price':'mean',
+                                'Monto_usdt': 'sum',              
+                                'Exchange_':'first',
+                                'Medio_pago':'first'})
+        df_final=df_final.reset_index(drop=False)
+        # Cambiar formato fecha 
+        df_final['time']=df_final['time'].apply(lambda x: dt.datetime.fromtimestamp(x/1000))
+        # Cambiar nombres 
+        df_final.rename({'orderId':'Order_Number','time':'Fecha','symbol':'Tipo_Cripto','qty':'Cantidad_cripto','quoteQty':'Precio_total','price':'Precio_unitario'},axis=1,inplace=True)
+        # Cambiar puntos por comas 
+        df_final['Cantidad_cripto']=df_final['Cantidad_cripto'].astype(str).str.replace('.',',')
+        df_final['Monto_usdt']=df_final['Monto_usdt'].astype(str).str.replace('.',',')
+        df_final['Precio_unitario']=df_final['Precio_unitario'].astype(str).str.replace('.',',')
+        df_final['Precio_total']=df_final['Precio_total'].astype(str).str.replace('.',',')
+        # Dar formato a fecha 
+        df_final['Fecha']=df_final["Fecha"].dt.strftime("%d-%m-%Y %H:%M:%S")
+        df_final['Fecha']=pd.to_datetime(df_final['Fecha'],format="%d-%m-%Y %H:%M:%S")
+        
+        # Ordenar datos por fecha 
+        df_final=df_final.sort_values('Fecha').reset_index(drop=True)
     
-    # Ordenar datos por fecha 
-    df_final=df_final.sort_values('Fecha').reset_index(drop=True)
+    else:
+        df_final=None
     
     return df_final
 
