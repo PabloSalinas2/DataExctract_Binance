@@ -32,7 +32,7 @@ Python
 
 Google sheet
 
-Librerias/Frameworks: pandas, numpy, pygsheet , requests , os, Tkinter, 
+Librerias/Frameworks: pandas, numpy, pygsheet , requests , os, Tkinter.
 
 
 

@@ -1,9 +1,14 @@
+# Librerias
 import pandas as pd
-import Clase_extraccion as app1  # cambiar por nombre extraccion_datos
+import Clase_extraccion as app1  
 import ETL
 import carga_datos_gsheet as load
 
-def cargar_planilla_contador(fecha_inicio, fecha_fin): # hacer que la fecha fin no sea obligatoria / Ex funcion planilla_contador
+
+def cargar_planilla_contador(fecha_inicio, fecha_fin): 
+    """
+    Extrae datos de Binance entre 2 fechas, los procesa y transforma para finalmente cargarlos en una hoja de calculo de google
+    """
     load.limpiar_sheet(1,'A3')
     p2p=app1.extraer_datos_p2p(fecha_inicio,fecha_fin)
     p2p=ETL.ETL_p2p_contador(p2p)
@@ -21,8 +26,10 @@ def cargar_planilla_contador(fecha_inicio, fecha_fin): # hacer que la fecha fin 
 
 
 
-def cargar_planilla_misregistros(fecha_inicial,fecha_final): # Ex funcion extraccion_top7
-    "Extrae datos de Binance, los procesa y luego los carga en planilla de google sheet donde se registran mis movimientos de arbitraje"
+def cargar_planilla_misregistros(fecha_inicial,fecha_final): 
+    """
+    Extrae datos de Binance entre 2 fechas, los procesa y transforma para finalmente cargarlos en una hoja de calculo de google
+    """
     load.limpiar_sheet(0,'A3')
     spot=app1.extraer_datos_spot(fecha_inicial,fecha_final)[0]
     spot=ETL.ETL_spot(spot)

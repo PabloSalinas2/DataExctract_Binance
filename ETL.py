@@ -3,7 +3,7 @@ import datetime as dt
 import numpy as np
 
 
-def ETL_spot(df_final): # colocar los datos extraidos de spot
+def ETL_spot(df_final): 
     
     # Agregar columnas 
     if df_final.shape[0]!=0:
@@ -54,9 +54,9 @@ def ETL_spot(df_final): # colocar los datos extraidos de spot
 
 
 
-def ETL_spot_contador(df_final): # colocar los datos extraidos de spot
+def ETL_spot_contador(df_final): 
     
-    # Agregar columnas
+    
     
 
     if df_final.shape[0]==0:
@@ -112,7 +112,7 @@ def ETL_spot_contador(df_final): # colocar los datos extraidos de spot
 
 
 
-# Transformacion de datos 
+
 def ETL_p2p(df_final):
     
     # Convierte la columna "createTime" a formato fecha
@@ -148,12 +148,7 @@ def ETL_p2p(df_final):
     df_final['orderNumber']=df_final['orderNumber'].astype(str).str.replace('.',',')
     df_final['Monto_usdt']=df_final['Monto_usdt'].astype(str).str.replace('.',',')
     
-    # Adaptar numeros para google sheet
 
-
-    # Cambiar zona horaria (no aplicar por el momento)
-    #df_final['createTime']=df_final['createTime']-dt.timedelta(hours=3)
-    # Ordenar registros por fecha 
     df_final=df_final.sort_values(by='createTime')
     # Renombrar columnas
     df_final.rename({'orderNumber':'Order_Number','tradeType':'Order_Type','createTime':'Fecha','asset':'Tipo_Cripto','amount':'Cantidad_cripto','totalPrice':'Precio_total','unitPrice':'Precio_unitario'},axis=1,inplace=True) # cambiar nombre segun DB mysql
@@ -173,10 +168,6 @@ def ETL_p2p_contador(df_final):
     # Añadir columna Exchange y columna medio de pago
     df_final['Exchange_']='Binance P2P'
     df_final['Medio_pago']='-'
-
-
-    # ADAPTACION PRELIMINAR, para considerar comisiones
-    # MODIFICACION QUE CONTEMPLA COMISION, SI LANZA ERROR BORRAR ESTA LINEA Y ANALIZAR EL CODIGO
     df_final['amount']=df_final['amount'].astype(float)
     df_final['commission']=df_final['commission'].astype(float)
     df_final['amount']=np.where(df_final['tradeType']=='SELL',df_final['amount']+df_final['commission'],df_final['amount']-df_final['commission'])

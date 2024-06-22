@@ -1,3 +1,4 @@
+# Librerias
 import funciones_principales as ap
 import tkinter
 from tkinter import messagebox
@@ -45,10 +46,6 @@ def main():
         label_estado.config(text="Carga Exitosa", fg="green",font=fuente)
         messagebox.showinfo("Carga de Datos", "Los datos se han cargado exitosamente.")
 
-    # def datos_arbitraje():
-    #     inicio=campo_fecha_inicial.get()
-    #     fin=campo_fecha_final.get()
-    #     ap.extraccion_general(inicio,fin)
 
     def registros_para_contador():
         label_estado.config(text="Cargando...", fg="blue",font=fuente)

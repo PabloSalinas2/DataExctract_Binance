@@ -1,3 +1,4 @@
+# Librerias
 from dotenv import load_dotenv
 import os
 import pandas as pd
@@ -8,8 +9,16 @@ import hashlib
 
 
 
-def fecha_a_unix(fecha): # Fecha en formato dd/mm/AA
-    'Transforma una fecha formato  dd/mm/AA en formato UNIX'
+def fecha_a_unix(fecha): 
+    """
+    Transforma una fecha en formato dd/mm/AA en formato UNIX 
+    Parametro:
+    fecha(date): Fecha en formato dd/mm/AA
+
+    Return:
+    int : Fecha en formato UNIX 
+
+    """
     año=int(fecha.split('/')[2])
     mes=int(fecha.split('/')[1])
     dia=int(fecha.split('/')[0])
@@ -20,7 +29,18 @@ def fecha_a_unix(fecha): # Fecha en formato dd/mm/AA
 
 #-----------------------------------------------------------------------------------------------------------------------------
 def extraccion_general_p2p(tipo,fecha_inicial='',fecha_final='',pagina=''):
+    """
+    Devuelve un Data Frame con datos de compra y venta realizados entre 2 fechas en el mercado P2P(peer to peer) del Exchange Binance
+    Parametros:
+    tipo(str): 
+    fecha_inicial(date):
+    fecha_final(date):
+    pagina(int):
 
+    Return:
+    Data Frame de pandas
+
+    """
     # Obtener timestamp de un servidor externo
     time_response = requests.get('http://worldtimeapi.org/api/timezone/Etc/UTC')
     if time_response.status_code == 200:
@@ -82,6 +102,17 @@ def extraccion_general_p2p(tipo,fecha_inicial='',fecha_final='',pagina=''):
 
 
 def extraccion_general_spot(symbol,fecha_inicial='',fecha_final=''):
+    """
+    Devuelve un Data Frame con datos de compra y venta realizados entre 2 fechas en el mercado Spot del Exchange Binance
+    Parametros:
+    symbol(str): 
+    fecha_inicial(date):
+    fecha_final(date):
+
+    Return:
+    Data Frame de pandas
+
+    """
     # Claves de la API 
     load_dotenv()
     api_key = os.getenv("API_KEY")
