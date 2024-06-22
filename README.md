@@ -29,8 +29,10 @@ Posterior a la extracción los datos son transformados y cargados en google shee
 ## Herramientas utilizadas 
 
 Python
-google sheet
-Librerias/Frameworks: pandas, numpy, pygsheet , requests , os
+
+Google sheet
+
+Librerias/Frameworks: pandas, numpy, pygsheet , requests , os, Tkinter, 
 
 
 
