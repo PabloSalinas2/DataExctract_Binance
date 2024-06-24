@@ -179,6 +179,7 @@ def extraer_datos_spot(inicio,fin):
     while fecha<=fecha_final:
         # Extraccion de datos de spot
         spot_USDTARS=extraccion_general_spot(symbol='USDTARS',fecha_inicial=fecha,fecha_final=fecha+86399000)
+        spot_USDTARS=extraccion_general_spot(symbol='BTCARS',fecha_inicial=fecha,fecha_final=fecha+86399000)
         spot_BTCUSDT=extraccion_general_spot(symbol='BTCUSDT',fecha_inicial=fecha,fecha_final=fecha+86399000)
         spot_ETHUSDT=extraccion_general_spot(symbol='ETHUSDT',fecha_inicial=fecha,fecha_final=fecha+86399000)
         spot_BNBUSDT=extraccion_general_spot(symbol='BNBUSDT',fecha_inicial=fecha,fecha_final=fecha+86399000)
