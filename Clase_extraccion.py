@@ -179,14 +179,14 @@ def extraer_datos_spot(inicio,fin):
     while fecha<=fecha_final:
         # Extraccion de datos de spot
         spot_USDTARS=extraccion_general_spot(symbol='USDTARS',fecha_inicial=fecha,fecha_final=fecha+86399000)
-        spot_USDTARS=extraccion_general_spot(symbol='BTCARS',fecha_inicial=fecha,fecha_final=fecha+86399000)
+        spot_BTCARS=extraccion_general_spot(symbol='BTCARS',fecha_inicial=fecha,fecha_final=fecha+86399000)
         spot_BTCUSDT=extraccion_general_spot(symbol='BTCUSDT',fecha_inicial=fecha,fecha_final=fecha+86399000)
         spot_ETHUSDT=extraccion_general_spot(symbol='ETHUSDT',fecha_inicial=fecha,fecha_final=fecha+86399000)
         spot_BNBUSDT=extraccion_general_spot(symbol='BNBUSDT',fecha_inicial=fecha,fecha_final=fecha+86399000)
         spot_XRPUSDT=extraccion_general_spot(symbol='XRPUSDT',fecha_inicial=fecha,fecha_final=fecha+86399000)
         spot_DOGEUSDT=extraccion_general_spot(symbol='DOGEUSDT',fecha_inicial=fecha,fecha_final=fecha+86399000)
         spot_ADAUSDT=extraccion_general_spot(symbol='ADAUSDT',fecha_inicial=fecha,fecha_final=fecha+86399000)
-        datos=[spot_USDTARS,spot_BTCUSDT,spot_ETHUSDT,spot_BNBUSDT,spot_XRPUSDT,spot_DOGEUSDT,spot_ADAUSDT]
+        datos=[spot_USDTARS,spot_BTCARS,spot_BTCUSDT,spot_ETHUSDT,spot_BNBUSDT,spot_XRPUSDT,spot_DOGEUSDT,spot_ADAUSDT]
         # convertir a dataframe    
    
         df_final=[]

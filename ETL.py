@@ -7,8 +7,12 @@ def ETL_spot(df_final):
     
     # Agregar columnas 
     if df_final.shape[0]!=0:
-        df_final['Order_Type']=np.where(df_final['symbol']!='USDTARS',~df_final["isBuyer"],df_final['isBuyer'])
-        df_final['Order_Type']=np.where(df_final['symbol']!='BTCARS',~df_final["isBuyer"],df_final['isBuyer'])
+        #df_final['Order_Type']=np.where(df_final['symbol']!='USDTARS',~df_final["isBuyer"],df_final['isBuyer'])
+        #df_final['Order_Type']=np.where(df_final['symbol']!='BTCARS',~df_final["isBuyer"],df_final['isBuyer'])
+        
+        valor_a_cambiar=np.array([True])
+        pares_objetivo=np.array(['USDTARS','BTCARS'])
+        df_final['Order_Type']=np.where(~df_final['symbol'].isin(pares_objetivo),~df_final["isBuyer"],df_final['isBuyer'])
         df_final['Order_Type']=df_final['Order_Type'].replace({True:'BUY',False:'SELL'})
         df_final['Medio_pago']='-'
         df_final['Exchange_']='Binance Spot'
