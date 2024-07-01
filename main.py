@@ -21,8 +21,8 @@ def main():
     ventana.grid_rowconfigure(1, weight=1)
     ventana.grid_columnconfigure(0, weight=1)
 
-    label_fecha_inicial=tkinter.Label(frame_superior,text='Fecha Inicial',font=fuente)
-    label_fecha_final=tkinter.Label(frame_superior,text='Fecha Final',font=fuente)
+    label_fecha_inicial=tkinter.Label(frame_superior,text='Fecha Inicial (dd/mm/aaaa)',font=fuente)
+    label_fecha_final=tkinter.Label(frame_superior,text='Fecha Final (dd/mm/aaaa)',font=fuente)
     label_fecha_inicial.grid(row=0,column=0)
     label_fecha_final.grid(row=0,column=1)
 
