@@ -13,7 +13,7 @@ En los campos `Fecha Inicial` y `Fecha Final` se introduce el rango de fechas so
 
 Cabe aclarar que desde el codigo pueden seleccionarse las dimensiones que el usuario considere necesarias, en este caso las mismas están seleccionadas en base a necesidades propias.
 
-![Interfaz](assets/app_binance.png)
+![Interfaz](assets/app_binance_img.png)
 
 
 ## Funcionamiento
