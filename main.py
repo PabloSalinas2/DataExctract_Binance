@@ -6,7 +6,7 @@ import threading
 
 def main():
     ventana=tkinter.Tk()
-    ventana.geometry("730x200")  
+    ventana.geometry("730x200")   
     ventana.title('Gestor de Datos Binance')
 
 
