@@ -1,7 +1,7 @@
 /env
 /Datos_crudos
 /__pycache__
-calculadora_arbitraje.py
+simulador.py
 optimizacion.ipynb
 .env
 calculadora_arbitraje
