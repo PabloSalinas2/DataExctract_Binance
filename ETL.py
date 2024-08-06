@@ -34,6 +34,12 @@ def ETL_spot(df_final):
                                 'Monto_usdt': 'sum',              
                                 'Exchange_':'first',
                                 'Medio_pago':'first'})
+        
+
+
+        df_final['quoteQty']=np.where((df_final['symbol']=='BTCUSDT'),'',df_final['quoteQty'])  #MODIFIACION
+
+
         df_final=df_final.reset_index(drop=False)
         # Cambiar formato fecha 
         df_final['time']=df_final['time'].apply(lambda x: dt.datetime.fromtimestamp(x/1000))
@@ -129,7 +135,6 @@ def ETL_p2p(df_final):
     # Añadir columna Exchange y columna medio de pago
     df_final['Exchange_']='Binance P2P'
 
-
     # ADAPTACION PRELIMINAR, para considerar comisiones
     # MODIFICACION QUE CONTEMPLA COMISION, SI LANZA ERROR BORRAR ESTA LINEA Y ANALIZAR EL CODIGO
     df_final['amount']=df_final['amount'].astype(float)
@@ -137,18 +142,22 @@ def ETL_p2p(df_final):
     df_final['amount']=np.where(df_final['tradeType']=='SELL',df_final['amount']+df_final['commission'],df_final['amount']-df_final['commission'])
 
 
-
-
     df_final['Medio_pago']='-'
     df_final['Monto_usdt']=np.where((df_final['asset']=='USDT') | (df_final['asset']=='USDC'),df_final['amount'],'')  # MODIFICACION 
-
 
 
     # Eleccion de columnas reelevantes 
     df_final=df_final.loc[:,['orderNumber','tradeType','createTime','asset','amount','totalPrice','unitPrice','Monto_usdt','Exchange_','Medio_pago']]
     # Cambiar tipo (Adaptar numeros para google sheet) , ppara otros casos remplazar por float
     df_final['amount']=df_final['amount'].astype(str).str.replace('.',',')
+
+    df_final['totalPrice']=np.where(df_final['asset']=='BTCUSDT','',df_final['totalPrice'])  # MODIFICACION 
     df_final['totalPrice']=df_final['totalPrice'].astype(str).str.replace('.',',')
+
+   
+
+
+
     df_final['unitPrice']=df_final['unitPrice'].astype(str).str.replace('.',',')
     df_final['orderNumber']=df_final['orderNumber'].astype(str).str.replace('.',',')
     df_final['Monto_usdt']=df_final['Monto_usdt'].astype(str).str.replace('.',',')

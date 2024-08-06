@@ -3,6 +3,8 @@ import pandas as pd
 import extraccion_datos_binance as app1  
 import ETL
 import carga_datos_gsheet as load
+import os 
+from binance.spot import Spot
 
 
 def cargar_planilla_contador(fecha_inicio, fecha_fin): 
@@ -51,5 +53,42 @@ def cargar_planilla_misregistros(fecha_inicial,fecha_final):
 
   
 
+# Añadida recientemente 
+# def cotizaciones_spot():
+#     api_key = os.getenv("API_KEY")
+#     secret_key = os.getenv("SECRET_KEY")    
+#     cliente=Spot(api_key,secret_key)
 
+#     datos=cliente.ticker_price(symbols=['BTCUSDT','ETHUSDT','BNBUSDT','XRPUSDT','DOGEUSDT','ADAUSDT'])
 
+#     df=pd.DataFrame(datos)
+#     df['price']=df['price'].astype(float)
+#     cotizaciones=df['price'].round(4)
+#     cotizaciones=cotizaciones.astype(str)
+#     cotizaciones=cotizaciones.str.replace('.',',')
+#     cotizaciones=pd.DataFrame(cotizaciones)
+#     cotizaciones=cotizaciones.rename(columns={'price':'Cot. Spot (USDT)'})
+#     cotizaciones['Cripto']=['BTC','ETH','BNB','XRP','DOGE','ADA']
+#     cotizaciones['Cot. P2P(ARS)']=''
+#     cotizaciones['Cot USDT']=''
+#     new_order=['Cripto','Cot. P2P(ARS)','Cot. Spot (USDT)','Cot USDT']
+#     cotizaciones=cotizaciones[new_order]
+#     return cotizaciones
+   
+
+    #load.load_to_sheet('Simulador','C8',cotizaciones) # ACTUALIZAR: No cargar en sheet, mostrar en la misma interfaz de la app 
+
+   
+def cotizaciones_spot():
+    api_key = os.getenv("API_KEY")
+    secret_key = os.getenv("SECRET_KEY")    
+    cliente=Spot(api_key,secret_key)
+
+    datos=cliente.ticker_price(symbols=['BTCUSDT','ETHUSDT','BNBUSDT','XRPUSDT','DOGEUSDT','ADAUSDT'])
+
+    df=pd.DataFrame(datos)
+    df['price']=df['price'].astype(float)
+    cotizaciones=df['price'].round(4)
+    
+    return cotizaciones
+   
